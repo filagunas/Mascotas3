@@ -26,12 +26,13 @@
         </activity>
         <activity
             android:name=".Top5"
-            android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".ContactoActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".About"></activity>
+            android:parentActivityName=".MainActivity">
+            <!--soporte para version 4.0-->
+           <meta-data
+               android:name="android.support.PARENT_ACTIVITY"
+               android:value=".MainActivity"></meta-data>
+            />
+</activity>
     </application>
 
 </manifest>

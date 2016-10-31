@@ -3,11 +3,9 @@ package com.filagunas.mascotas;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,62 +16,57 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.filagunas.mascotas.adapter.MascotaAdaptador;
-import com.filagunas.mascotas.adapter.PageAdapter;
-import com.filagunas.mascotas.fragment.PerfilFragment;
-import com.filagunas.mascotas.fragment.ReciclerViewFragment;
 import com.filagunas.mascotas.pojo.Mascota;
 
 import java.util.ArrayList;
 
-import static com.filagunas.mascotas.R.id.activity_contacto;
 
 public class MainActivity extends AppCompatActivity {
-
     ArrayList<Mascota> mascotas;
+    private RecyclerView listaMascotas;
     Button top;
-    private Toolbar toolbar;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private ReciclerViewFragment rvfmascotas;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
-        toolbar =(Toolbar) findViewById(R.id.toolbar);
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
-
-        setUpViewPager();
-        botoncamera();
-
-
+        //Creacion de Toolbar
+        Toolbar miActionBar = (Toolbar) findViewById(R.id.miActionbar);
+        setSupportActionBar(miActionBar);
         top =(Button) findViewById(R.id.favoritos);
-
-        if(toolbar!= null){
-            setSupportActionBar(toolbar);
-        }
-    }
-    private ArrayList<Fragment> agregarFragments(){
-        ArrayList<Fragment> fragments =new ArrayList<>();
-        this.rvfmascotas= new ReciclerViewFragment();
-        fragments.add(this.rvfmascotas);
-        fragments.add(new PerfilFragment());
-        return fragments;
-    }
-    private void setUpViewPager(){
-        viewPager.setAdapter(new PageAdapter(getSupportFragmentManager(),agregarFragments()));
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setIcon(R.mipmap.home);
-        tabLayout.getTabAt(1).setIcon(R.mipmap.perfildog);
+        //llamada al RecyclerView
+        listaMascotas = (RecyclerView) findViewById(R.id.rvMascotas);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        listaMascotas.setLayoutManager(llm);
+        inicializarListaMascotas();
+        botoncamera();
+        inicializarAdaptador();
 
     }
 
+    public MascotaAdaptador adaptador;
+
+    public void inicializarAdaptador() {
+        adaptador = new MascotaAdaptador(mascotas, this);
+        listaMascotas.setAdapter(adaptador);
+    }
 
 
-//Carga de menu
+    public void inicializarListaMascotas() {
+        mascotas = new ArrayList<Mascota>();
+        mascotas.add(new Mascota(R.drawable.p1, "fido", "perro", 0));
+        mascotas.add(new Mascota(R.drawable.p2, "puppy", "perro", 0));
+        mascotas.add(new Mascota(R.drawable.p3, "shira", "perro", 0));
+        mascotas.add(new Mascota(R.drawable.p4, "aquiles", "perro", 0));
+        mascotas.add(new Mascota(R.drawable.p5, "duque", "perro", 0));
+        mascotas.add(new Mascota(R.drawable.p6, "naila", "perro", 0));
+        mascotas.add(new Mascota(R.drawable.p7, "shina", "perro", 0));
+        mascotas.add(new Mascota(R.drawable.p8, "hanna", "perro", 0));
+
+
+    }
+    //Carga de menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_activity_actions, menu);
@@ -83,35 +76,28 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-            int id = item.getItemId();
-            if (id == R.id.menu) {
-                Intent IContacto=new Intent(this, ContactoActivity.class);
-                Toast.makeText(this,"presiono la opcion Contactar:", Toast.LENGTH_LONG).show();
-                startActivity(IContacto);
-                return true;
-                }
-          if (id == R.id.menu1) {
-              Intent IAbout=new Intent(this, About.class);
-              Toast.makeText(this,"presiono la opcion Contactar:", Toast.LENGTH_LONG).show();
-              startActivity(IAbout);
-              return true;
+        int id = item.getItemId();
+        if (id == R.id.menu) {
 
-
+            Toast.makeText(this,"presiono la opcion 1:", Toast.LENGTH_LONG).show();
         }
-                   if (id == R.id.favoritos) {
+        if (id == R.id.menu1) {
+
+            Toast.makeText(this,"presiono la opcion 2:", Toast.LENGTH_LONG).show();
+        }
+        if (id == R.id.favoritos) {
 
             Intent intent=new Intent(this, Top5.class);
-
-            intent.putParcelableArrayListExtra("listatop", this.rvfmascotas.getMascotas());
+            intent.putExtra("listatop", mascotas);
             Toast.makeText(MainActivity.this,"presiono la opcion favoritos:", Toast.LENGTH_LONG).show();
 
             startActivity(intent);
             return true;
 
 
-            }
+        }
 
-         return  super.onOptionsItemSelected(item);
+        return  super.onOptionsItemSelected(item);
 
 
     }

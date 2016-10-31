@@ -3,6 +3,7 @@ package com.filagunas.mascotas;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,23 @@ public class DetalleMascota extends AppCompatActivity {
         super.onCreate(savedInstanceState);
        // getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_detalle_mascota);
+        //toolbar
+        Toolbar miActionBar = (Toolbar) findViewById(R.id.miActionbar);
+        setSupportActionBar(miActionBar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //boton subir
+        miActionBar.setNavigationIcon(getResources().getDrawable(R.drawable.lef));
+        miActionBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //regresar...
+                finish();
+            }
+        });
+
         Bundle parametros       =getIntent().getExtras();
         String  mascota         =parametros.getString("mascota");
         String  raza            =parametros.getString("raza");
